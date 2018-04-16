@@ -1,6 +1,6 @@
 @echo off
 
-set THIRD_PARTY_DIR=C:\Users\jeffe\dev\3rdparty
+REM THIRD_PARTY_DIR is set as system variable.
 
 call %THIRD_PARTY_DIR%\set-sfml-env.bat
 
