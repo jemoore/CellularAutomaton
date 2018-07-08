@@ -23,6 +23,7 @@
     <ProjectGuid>{85B03580-DC6F-4CD3-950D-DC1639E77D0F}</ProjectGuid>
     <RootNamespace>SfmlExample</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <ProjectName>CellularAutomaton</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

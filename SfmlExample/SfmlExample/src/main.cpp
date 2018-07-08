@@ -1,12 +1,38 @@
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include <ctime>
+#include <cstdlib>
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(512, 512), "SFML works!");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	srand(time(NULL));
+	const float cellSize = 10.0f; // square
+	const unsigned int windowH = 600;
+	const unsigned int windowW = 600;
 
-	float switchTime = 700.0f;
+	const unsigned int numHCells = windowH / (int)cellSize;
+	const unsigned int numWCells = windowW / (int)cellSize;
+
+	typedef std::vector<sf::RectangleShape> CellRow;
+	std::vector<CellRow> board;
+	const float xOffset = cellSize / 2.0f;
+	const float yOffset = cellSize / 2.0f;
+
+	for (unsigned int i = 0; i < numWCells; i++) {
+		CellRow row;
+		for (unsigned int j = 0; j < numHCells; j++) {
+			sf::RectangleShape shape(sf::Vector2f(cellSize, cellSize));
+			shape.setFillColor(sf::Color::Green);
+			shape.setPosition(xOffset + (j * cellSize), yOffset + (i * cellSize));
+
+			row.push_back(shape);
+		}
+		board.push_back(row);
+	}
+	sf::RenderWindow window(sf::VideoMode(windowW, windowH), "SFML works!");
+
+
+	const float switchTime = 700.0f;
 	float deltaTime = 0.0f;
 	float totalTime = 0.0f;
 
@@ -28,21 +54,17 @@ int main()
 					window.close();
 			}
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-				shape.move(-0.01f, 0.0f);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-				shape.move(0.01f, 0.0f);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-				shape.move(0.0f, -0.01f);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-				shape.move(0.0f, 0.01f);
-			}
-		
 			window.clear();
-			window.draw(shape);
+			const int x = rand() % numWCells;
+			const int y = rand() % numHCells;
+			board[y][x].setFillColor(sf::Color::Blue);
+
+			for (unsigned int i = 0; i < numWCells; i++) {
+				for (unsigned int j = 0; j < numHCells; j++) {
+					window.draw(board[i][j]);
+				}
+			}
+
 			window.display();
 		}
 	}
