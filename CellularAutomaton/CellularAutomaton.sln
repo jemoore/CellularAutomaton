@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SfmlExample", "SfmlExample\SfmlExample.vcxproj", "{85B03580-DC6F-4CD3-950D-DC1639E77D0F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CellularAutomaton", "CellularAutomaton\CellularAutomaton.vcxproj", "{85B03580-DC6F-4CD3-950D-DC1639E77D0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,6 +4,6 @@ call set-env.bat
 
 cd %~dp0
 
-set GAME_DIR=SfmlExample\x64\Debug
+set GAME_DIR=CellularAutomaton\x64\Debug
 
-%GAME_DIR%\SfmlExample.exe
+%GAME_DIR%\CellularAutomaton.exe
