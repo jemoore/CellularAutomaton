@@ -19,7 +19,7 @@ if not exist "%~dp0\CellularAutomaton\build" (
 	goto END
 )
 
-set SFML_DIR=%THIRD_PARTY_DIR%\sfml\SFML-2.4.2-windows-vc14-64-bit\SFML-2.4.2\cmake\Modules
+call set-env.bat
 
 cd "%~dp0\CellularAutomaton\build"
 cmake -DCMAKE_GENERATOR_PLATFORM=x64 ..
