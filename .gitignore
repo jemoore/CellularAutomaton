@@ -31,7 +31,11 @@
 *.out
 *.app
 
+# CMake out of source build
+build
+
 # Visual Studio Files
+x64
 Debug
 Release
 *.suo
@@ -39,4 +43,7 @@ Release
 *.vbproj.user
 *.ipch
 .vs
+*.vcproj*
+*.sln
+*.vcxproj*
 
