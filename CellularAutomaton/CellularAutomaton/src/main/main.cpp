@@ -1,3 +1,6 @@
+#include <ModelInterface.h>
+#include <ConwayModel.h>
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <ctime>
@@ -5,6 +8,8 @@
 
 int main()
 {
+	jem_models::ConwayModel m(10,10);
+
 	srand(time(NULL));
 
 	const float cellSize = 10.0f; // square
