@@ -8,28 +8,37 @@
 
 int main()
 {
-	jem_models::ConwayModel m(10,10);
-
+	/* initialize random seed: */
 	srand(time(NULL));
 
 	const float cellSize = 10.0f; // square
-	const unsigned int windowH = 600;
-	const unsigned int windowW = 600;
+	const unsigned int windowH = 1000;
+	const unsigned int windowW = 1000;
 
-	const unsigned int numHCells = windowH / (int)cellSize;
-	const unsigned int numWCells = windowW / (int)cellSize;
+	const unsigned int rowCnt = windowH / (int)cellSize;
+	const unsigned int colCnt = windowW / (int)cellSize;
+
+	jem_models::ConwayModel m(rowCnt, colCnt);
+	m.initialize();
 
 	typedef std::vector<sf::RectangleShape> CellRow;
 	std::vector<CellRow> board;
 	const float xOffset = cellSize / 2.0f;
 	const float yOffset = cellSize / 2.0f;
 
-	for (unsigned int i = 0; i < numWCells; i++) {
+	for (unsigned int i = 0; i < rowCnt; i++) {
 		CellRow row;
-		for (unsigned int j = 0; j < numHCells; j++) {
+		for (unsigned int j = 0; j < colCnt; j++) {
 			sf::RectangleShape shape(sf::Vector2f(cellSize, cellSize));
-			shape.setFillColor(sf::Color::Green);
-			shape.setPosition(xOffset + (j * cellSize), yOffset + (i * cellSize));
+			sf::Color c = sf::Color::Green;
+			if (m.getColor(i, j) == jem_models::white) {
+				c = sf::Color::White;
+			}
+			else if (m.getColor(i, j) == jem_models::black) {
+				c = sf::Color::Black;
+			}
+			shape.setFillColor(c);
+			shape.setPosition(xOffset + (i * cellSize), yOffset + (j * cellSize));
 
 			row.push_back(shape);
 		}
@@ -38,7 +47,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(windowW, windowH), "SFML works!");
 
 
-	const float switchTime = 700.0f;
+	const float switchTime = 500000.0f;//700.0f;
 	float deltaTime = 0.0f;
 	float totalTime = 0.0f;
 
@@ -60,18 +69,32 @@ int main()
 					window.close();
 			}
 
-			window.clear();
-			const int x = rand() % numWCells;
-			const int y = rand() % numHCells;
-			board[y][x].setFillColor(sf::Color::Blue);
 
-			for (unsigned int i = 0; i < numWCells; i++) {
-				for (unsigned int j = 0; j < numHCells; j++) {
+			window.clear();
+
+			//const int x = rand() % numWCells;
+			//const int y = rand() % numHCells;
+			//board[y][x].setFillColor(sf::Color::Blue);
+			for (unsigned int i = 0; i < rowCnt; i++) {
+				for (unsigned int j = 0; j < colCnt; j++) {
+					sf::Color c = sf::Color::Green;
+
+					if (m.getColor(i, j) == jem_models::white) {
+						c = sf::Color::White;
+					}
+					else if (m.getColor(i, j) == jem_models::black) {
+						c = sf::Color::Black;
+					}
+					board[i][j].setFillColor(c);
+
 					window.draw(board[i][j]);
 				}
 			}
 
 			window.display();
+
+			m.runModel();
+
 		}
 	}
 

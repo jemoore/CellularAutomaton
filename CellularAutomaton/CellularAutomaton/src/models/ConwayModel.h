@@ -10,9 +10,9 @@ public:
 
 	ConwayModel(unsigned int rowCnt, unsigned int colCount);
 
-	virtual const CellModel& getRandomCellModel();
+	virtual const CellModel* getRandomCellModel(const unsigned int r, const unsigned int c);
 
-	virtual void updateCellModel(CellModel& cmodel, const std::vector<const CellModel*>& neighbors);
+	virtual void updateCellModel(const CellModel*& cmodel, const std::vector<const CellModel*>& neighbors);
 
 private:
 	static const CellState aliveState_;

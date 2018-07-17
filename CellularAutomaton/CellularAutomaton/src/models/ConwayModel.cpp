@@ -1,10 +1,12 @@
 /*
+ * https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
  * Any live cell with fewer than two live neighbors dies, as if by under population.
  * Any live cell with two or three live neighbors lives on to the next generation.
  * Any live cell with more than three live neighbors dies, as if by overpopulation.
  * Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
 */
 #include <ConwayModel.h>
+#include <cstdlib>
 
 using namespace jem_models;
 
@@ -23,14 +25,45 @@ BoardModel(rowCnt, colCount)
 
 }
 
-const CellModel& ConwayModel::getRandomCellModel()
+const CellModel* ConwayModel::getRandomCellModel(const unsigned int r, const unsigned int c)
 {
-	return aliveModel_;
-	//CellModel cm(aliveState_, aliveColor_);
-	//return cm;
+	//if ( ( (c == 20 || c ==21) && (r == 10 || r == 11) ) ||
+	//	 ( (c == 22 | c == 23) && (r == 12 || r == 13) ) 
+	//){
+	//	return &aliveModel_;
+	//}
+	//return &deadModel_;
+	if (rand() % 2) {
+		return &aliveModel_;
+	}
+	
+	return &deadModel_;
 }
 
-void ConwayModel::updateCellModel(CellModel& cmodel, const std::vector<const CellModel*>& neighbors)
+/*
+* Any live cell with fewer than two live neighbors dies, as if by under population.
+* Any live cell with two or three live neighbors lives on to the next generation.
+* Any live cell with more than three live neighbors dies, as if by overpopulation.
+* Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+*/
+void ConwayModel::updateCellModel(const CellModel*& cmodel, const std::vector<const CellModel*>& neighbors)
 {
-	cmodel.setColor(black);
+	unsigned int alive = 0;
+
+	for (auto n : neighbors) {
+		if (n->getState() == &aliveState_) {
+			++alive;
+		}
+	}
+
+	if (cmodel->getState() == &aliveState_) {
+		if (alive < 2 || alive > 3) {
+			cmodel = &deadModel_;
+		}
+	}
+	else {
+		if (alive == 3) {
+			cmodel = &aliveModel_;
+		}
+	}
 }
