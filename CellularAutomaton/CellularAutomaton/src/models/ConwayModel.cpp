@@ -6,7 +6,9 @@
  * Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
 */
 #include <ConwayModel.h>
-#include <cstdlib>
+#include <chrono>
+#include <functional>
+#include <random>
 
 using namespace jem_models;
 
@@ -27,13 +29,17 @@ BoardModel(rowCnt, colCount)
 
 const CellModel* ConwayModel::getRandomCellModel(const unsigned int r, const unsigned int c)
 {
+	auto seed = 
+		std::chrono::high_resolution_clock::now().time_since_epoch().count();
+	auto state = 
+		std::bind(std::uniform_int_distribution<int>(0, 1), std::mt19937(seed));
 	//if ( ( (c == 20 || c ==21) && (r == 10 || r == 11) ) ||
 	//	 ( (c == 22 | c == 23) && (r == 12 || r == 13) ) 
 	//){
 	//	return &aliveModel_;
 	//}
 	//return &deadModel_;
-	if (rand() % 2) {
+	if (state()) {
 		return &aliveModel_;
 	}
 	

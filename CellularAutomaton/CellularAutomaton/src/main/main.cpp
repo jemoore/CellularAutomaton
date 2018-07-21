@@ -3,15 +3,10 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include <ctime>
-#include <cstdlib>
 
 int main()
 {
-	/* initialize random seed: */
-	srand(time(NULL));
-
-	const float cellSize = 10.0f; // square
+	const float cellSize = 5.0f; // square
 	const unsigned int windowH = 1000;
 	const unsigned int windowW = 1000;
 
@@ -47,7 +42,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(windowW, windowH), "SFML works!");
 
 
-	const float switchTime = 500000.0f;//700.0f;
+	const float switchTime = 500.0f;//700.0f;
 	float deltaTime = 0.0f;
 	float totalTime = 0.0f;
 
