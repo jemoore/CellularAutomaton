@@ -22,7 +22,11 @@ public:
 
 class CellModel {
 public:
+	CellModel();
 	CellModel(const CellState* state, CellColor color);
+	CellModel(const CellModel& cm);
+
+	CellModel& operator=(const CellModel& rhs);
 
 	void setState(const CellState* state);
 	void setColor(CellColor color);
@@ -37,7 +41,7 @@ private:
 
 class BoardModel {
 public:
-	typedef std::vector<const CellModel*> VecOfCellModelPtrs;
+	typedef std::vector<CellModel> VecOfCellModel;
 
 	BoardModel(unsigned int rowCount, unsigned int colCount);
 	virtual ~BoardModel();
@@ -45,31 +49,23 @@ public:
 	virtual unsigned int getRowCount() const;
 	virtual unsigned int getColumnCount() const;
 
-	virtual const CellModel* getRandomCellModel(const unsigned int r, const unsigned int c) = 0;
+	virtual const CellModel getRandomCellModel(const unsigned int r, const unsigned int c) = 0;
+	virtual const CellModel getCellModel(const unsigned int r, const unsigned int c) const;
 
-	virtual void updateCellModel(const CellModel*& cmodel, const VecOfCellModelPtrs& neighbors) = 0;
+	virtual void updateCellModel(CellModel& cmodel, const VecOfCellModel& neighbors) = 0;
 
-	virtual void getNeighbors(VecOfCellModelPtrs& n, const unsigned int r, const unsigned int c) const;
+	virtual void getNeighbors(VecOfCellModel& n, const unsigned int r, const unsigned int c) const;
 
 	virtual void initialize();
 	virtual void runModel();
 
 	CellColor getColor(unsigned int r, unsigned int c) const;
 
-protected:
-	typedef std::vector< VecOfCellModelPtrs > BoardType;
-
-	virtual void initialize(BoardType& b);
-
-	virtual BoardType* getNonActiveBoard();
-
 private:
 	unsigned int row_count_;
 	unsigned int column_count_;
 
-	BoardType board1_;
-	BoardType board2_;
-	BoardType* activeBoard_;
+	VecOfCellModel board_;
 };
 
 }

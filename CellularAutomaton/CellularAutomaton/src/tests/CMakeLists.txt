@@ -27,6 +27,8 @@ target_link_libraries(unit_tests
     models
     GTest::GTest 
     GTest::Main
+	GMock::GMock
+	GMock::Main
 )
 
 add_test(test_all unit_tests)

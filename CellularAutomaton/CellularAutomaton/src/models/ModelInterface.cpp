@@ -11,11 +11,30 @@ CellState::~CellState() {
 
 }
 
+CellModel::CellModel() :
+state_(NULL),
+color_(black)
+{
+
+}
+
 CellModel::CellModel(const CellState* state, CellColor color) :
 state_(state),
 color_(color)
 {
 
+}
+
+CellModel::CellModel(const CellModel& cm) {
+	this->state_ = cm.getState();
+	this->color_ = cm.getColor();
+}
+
+CellModel& CellModel::operator=(const CellModel& rhs) {
+	this->state_ = rhs.getState();
+	this->color_ = rhs.getColor();
+
+	return *this;
 }
 
 void CellModel::setState(const CellState* state) {
@@ -36,8 +55,7 @@ CellColor CellModel::getColor() const {
 
 BoardModel::BoardModel(unsigned int rowCount, unsigned int colCount) :
 	row_count_(rowCount),
-	column_count_(colCount),
-	activeBoard_(&board1_)
+	column_count_(colCount)
 {
 }
 
@@ -53,7 +71,15 @@ unsigned int BoardModel::getColumnCount() const{
 	return column_count_;
 }
 
-void BoardModel::getNeighbors(VecOfCellModelPtrs& n, const unsigned int r, const unsigned int c) const {
+const CellModel BoardModel::getCellModel(const unsigned int r, const unsigned int c) const {
+	assert(r < row_count_ && c < column_count_);
+
+	return board_[r * column_count_ + c];
+}
+
+void BoardModel::getNeighbors(VecOfCellModel& n, const unsigned int r, const unsigned int c) const {
+	assert(r < row_count_ && c < column_count_);
+
 	unsigned int row_above = 0;
 	unsigned int row_below = 0;
 	unsigned int col_left = 0;
@@ -64,56 +90,49 @@ void BoardModel::getNeighbors(VecOfCellModelPtrs& n, const unsigned int r, const
 	col_left = c == 0 ? column_count_ - 1 : c - 1;
 	col_right = c == column_count_ - 1 ? 0 : c + 1;
 
-	n.push_back((*activeBoard_)[r][col_left]);
-	n.push_back((*activeBoard_)[row_above][c]);
-	n.push_back((*activeBoard_)[r][col_right]);
-	n.push_back((*activeBoard_)[row_below][c]);
-	n.push_back((*activeBoard_)[row_above][col_left]);
-	n.push_back((*activeBoard_)[row_below][col_left]);
-	n.push_back((*activeBoard_)[row_above][col_right]);
-	n.push_back((*activeBoard_)[row_below][col_right]);
-
+	n.push_back(getCellModel(r,col_left));
+	n.push_back(getCellModel(row_above,c));
+	n.push_back(getCellModel(r,col_right));
+	n.push_back(getCellModel(row_below,c));
+	n.push_back(getCellModel(row_above,col_left));
+	n.push_back(getCellModel(row_below,col_left));
+	n.push_back(getCellModel(row_above,col_right));
+	n.push_back(getCellModel(row_below,col_right));
 }
 
-
-void BoardModel::initialize(BoardType& b) {
-	b.resize(row_count_);
-
-	for (unsigned int r = 0; r < row_count_; r++) {
-		for (unsigned int c = 0; c < column_count_; c++) {
-			b[r].push_back(getRandomCellModel(r,c));
-		}
-	}
-}
 
 void BoardModel::initialize() {
-	initialize(board1_);
-	initialize(board2_);
+	for (unsigned int r = 0; r < row_count_; r++) {
+		for (unsigned int c = 0; c < column_count_; c++) {
+			board_.push_back(getRandomCellModel(r,c));
+		}
+	}
 }
 
+
 void BoardModel::runModel() {
-	BoardType* b = getNonActiveBoard();
+	VecOfCellModel b;
 
 	for (unsigned int r = 0; r < row_count_; r++) {
 		for (unsigned int c = 0; c < column_count_; c++) {
-			VecOfCellModelPtrs n;
+
+			VecOfCellModel n;
 			getNeighbors(n, r, c);
-			const CellModel** active_cm = &((*b)[r][c]);
-			const CellModel** cm = &((*b)[r][c]);
-			cm = active_cm;
-			updateCellModel(*cm, n);
+
+			CellModel cm = getCellModel(r, c);
+
+			updateCellModel(cm, n);
+
+			b.push_back(cm);
 		}
 	}
 
-	activeBoard_ = b;
+	board_ = std::move(b);
 }
 
 CellColor BoardModel::getColor(unsigned int r, unsigned int c) const{
 	assert(r < row_count_ && c < column_count_);
 
-	return (*activeBoard_)[r][c]->getColor();
+	return getCellModel(r,c).getColor();
 }
 
-BoardModel::BoardType* BoardModel::getNonActiveBoard() {
-	return (activeBoard_ == &board1_ ? &board2_ : &board1_);
-}

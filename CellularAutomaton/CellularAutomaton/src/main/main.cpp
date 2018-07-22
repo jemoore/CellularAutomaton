@@ -7,8 +7,8 @@
 int main()
 {
 	const float cellSize = 5.0f; // square
-	const unsigned int windowH = 1000;
-	const unsigned int windowW = 1000;
+	const unsigned int windowH = 400;
+	const unsigned int windowW = 400;
 
 	const unsigned int rowCnt = windowH / (int)cellSize;
 	const unsigned int colCnt = windowW / (int)cellSize;
@@ -42,7 +42,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(windowW, windowH), "SFML works!");
 
 
-	const float switchTime = 500.0f;//700.0f;
+	const float switchTime = 100.0f;//700.0f;
 	float deltaTime = 0.0f;
 	float totalTime = 0.0f;
 
